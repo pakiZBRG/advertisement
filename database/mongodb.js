@@ -3,7 +3,7 @@ import chalk from "chalk";
 
 import { MONGO_URI } from "../config/env.js";
 
-export const connectMongoDB = async () => {
+const connectMongoDB = async () => {
   try {
     await mongoose.connect(MONGO_URI);
 
@@ -12,3 +12,5 @@ export const connectMongoDB = async () => {
     console.log(`Mongo connection ${chalk.bold.red(error)}: ${error}`);
   }
 };
+
+export default connectMongoDB;
