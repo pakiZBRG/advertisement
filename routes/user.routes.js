@@ -1,18 +1,13 @@
 import { Router } from "express";
+
 import {
   deleteUser,
   getUser,
   getUserAds,
-  register,
-  signIn,
   updateUser,
 } from "../controllers/users.controller.js";
 
 const userRouter = Router();
-
-userRouter.post("/register", register);
-
-userRouter.post("/sign-in", signIn);
 
 userRouter.get("/:id", getUser);
 

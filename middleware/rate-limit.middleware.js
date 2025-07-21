@@ -15,6 +15,8 @@ const rateLimitMiddleware = async (req, res, next) => {
 
       return res.status(403).json({ error: "Access denied" });
     }
+
+    next();
   } catch (error) {
     console.log(`Arcjet Middleware ${chalk.red("Error")}: ${error}`);
     next(error);

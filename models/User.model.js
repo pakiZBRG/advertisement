@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
     },
+    jwtActivation: {
+      type: String,
+    },
+    token: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
