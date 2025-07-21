@@ -41,7 +41,7 @@ userRouter.post(
 );
 
 userRouter.post(
-  "/reset-password",
+  "/reset-password/:token",
   passwordValidator,
   handleValidation,
   resetPassword

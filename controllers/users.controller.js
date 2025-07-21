@@ -153,7 +153,42 @@ export const forgotPassword = async (req, res, next) => {
   }
 };
 
-export const resetPassword = async (req, res, next) => {};
+export const resetPassword = async (req, res, next) => {
+  const { token } = req.params;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const findUser = await User.findOne({ token, verified: true });
+    if (!findUser) {
+      return res.status(404).json({ message: "User is not found" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(findUser.password, salt);
+
+    const verify = jwt.verify(findUser.jwtToken, JWT_ACTIVATE);
+    await User.updateOne(
+      { token: verify.token },
+      {
+        token: "",
+        jwtToken: "",
+        password: hashedPassword,
+      }
+    );
+
+    await session.commitTransaction();
+
+    res.status(200).json({
+      message: "Password has been successfully reseted.",
+    });
+  } catch (error) {
+    next(error);
+  } finally {
+    session.endSession();
+  }
+};
 
 export const signIn = async (req, res, next) => {};
 

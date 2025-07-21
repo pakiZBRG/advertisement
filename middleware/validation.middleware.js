@@ -12,7 +12,9 @@ export const registerValidator = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long")
     .matches(/\d/)
-    .withMessage("Password must contain at least one number"),
+    .withMessage("Password must contain at least one number")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter"),
 ];
 
 export const emailValidator = [
@@ -25,7 +27,9 @@ export const passwordValidator = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long")
     .matches(/\d/)
-    .withMessage("Password must contain at least one number"),
+    .withMessage("Password must contain at least one number")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter"),
 ];
 
 export const handleValidation = (req, res, next) => {
