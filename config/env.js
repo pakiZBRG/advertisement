@@ -8,5 +8,5 @@ export const {
   ARCJET_KEY,
   EMAIL,
   PASSWORD,
-  JWT_ACTIVATE,
+  JWT_SECRET,
 } = process.env;

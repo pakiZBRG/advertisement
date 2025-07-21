@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/User.model.js";
 import sendEmail from "../utils/send-email.js";
-import { JWT_ACTIVATE } from "../config/env.js";
+import { JWT_SECRET } from "../config/env.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const register = async (req, res, next) => {
@@ -27,7 +27,7 @@ export const register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const token = uuidv4();
-    const jwtToken = jwt.sign({ token }, JWT_ACTIVATE, { expiresIn: 600 });
+    const jwtToken = jwt.sign({ token }, JWT_SECRET, { expiresIn: 600 });
 
     const user = new User({
       username,
@@ -66,7 +66,7 @@ export const activate = async (req, res, next) => {
         .json({ message: "User doesn't exist or is verified" });
     }
 
-    const verify = jwt.verify(findUser.jwtToken, JWT_ACTIVATE);
+    const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
     await User.updateOne(
       { token: verify.token },
       {
@@ -101,7 +101,7 @@ export const resentActivation = async (req, res, next) => {
         .json({ message: "User is not found or is verified." });
     }
 
-    const jwtToken = jwt.sign({ token: findUser.token }, JWT_ACTIVATE, {
+    const jwtToken = jwt.sign({ token: findUser.token }, JWT_SECRET, {
       expiresIn: 600,
     });
 
@@ -136,7 +136,7 @@ export const forgotPassword = async (req, res, next) => {
     }
 
     const token = uuidv4();
-    const jwtToken = jwt.sign({ token }, JWT_ACTIVATE, { expiresIn: 600 });
+    const jwtToken = jwt.sign({ token }, JWT_SECRET, { expiresIn: 600 });
 
     await User.updateOne({ email }, { token, jwtToken });
     await session.commitTransaction();
@@ -168,7 +168,7 @@ export const resetPassword = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(findUser.password, salt);
 
-    const verify = jwt.verify(findUser.jwtToken, JWT_ACTIVATE);
+    const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
     await User.updateOne(
       { token: verify.token },
       {
@@ -190,7 +190,54 @@ export const resetPassword = async (req, res, next) => {
   }
 };
 
-export const signIn = async (req, res, next) => {};
+export const login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const findUser = await User.findOne({ email });
+    if (!findUser) {
+      return res.status(404).json({ message: "Wrong credentials" });
+    }
+
+    const validPassword = await bcrypt.compare(password, findUser.password);
+    if (!validPassword)
+      return res.status(409).json({ error: "Wrong Credentials" });
+
+    const accessToken = jwt.sign({ _id: findUser._id }, JWT_SECRET, {
+      expiresIn: 600,
+    });
+    const refreshToken = jwt.sign({ _id: findUser._id }, JWT_SECRET, {
+      expiresIn: "10d",
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+    await User.updateOne({ email }, { refreshToken: hashedRefreshToken });
+
+    await session.commitTransaction();
+
+    return res
+      .status(200)
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true, // 🔒 Can't be accessed by JS
+        secure: true, // 🔐 Only over HTTPS
+        sameSite: "Strict", // 🚫 Prevent CSRF (depending on use case)
+        maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+      })
+      .json({
+        message: "Successful login",
+        token: accessToken,
+      });
+  } catch (error) {
+    next(error);
+  } finally {
+    session.endSession();
+  }
+};
 
 export const getUser = async (req, res, next) => {};
 

@@ -20,9 +20,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Used for activation and password reset
     jwtToken: {
       type: String,
     },
+    // After logging in store the token for 7 days (or until log out) for refreshing the 15min access token
+    refreshToken: {
+      type: String,
+    },
+    // Used in URLs for activation and password reset instead of exposing JWT
     token: {
       type: String,
     },

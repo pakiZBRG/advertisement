@@ -6,7 +6,7 @@ import {
   resentActivation,
   forgotPassword,
   resetPassword,
-  signIn,
+  login,
   deleteUser,
   getUser,
   getUserAds,
@@ -47,7 +47,13 @@ userRouter.post(
   resetPassword
 );
 
-userRouter.post("/signin", signIn);
+userRouter.post(
+  "/login",
+  emailValidator,
+  passwordValidator,
+  handleValidation,
+  login
+);
 
 userRouter.get("/:id", getUser);
 
