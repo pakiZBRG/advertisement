@@ -6,18 +6,20 @@ import {
   register,
   signIn,
   updateUser,
-} from "../controllers/users.controller";
+} from "../controllers/users.controller.js";
 
-const router = Router();
+const userRouter = Router();
 
-router.post("/register", register);
+userRouter.post("/register", register);
 
-router.post("/sign-in", signIn);
+userRouter.post("/sign-in", signIn);
 
-router.get("/:id", getUser);
+userRouter.get("/:id", getUser);
 
-router.put("/:id", updateUser);
+userRouter.put("/:id", updateUser);
 
-router.delete("/:id", deleteUser);
+userRouter.delete("/:id", deleteUser);
 
-router.get("/user-ads", getUserAds);
+userRouter.get("/user-ads", getUserAds);
+
+export default userRouter;

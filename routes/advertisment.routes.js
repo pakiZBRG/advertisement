@@ -8,16 +8,18 @@ import {
   updateAdvertisment,
 } from "../controllers/advertisments.controller.js";
 
-const router = Router();
+const advertismentRouter = Router();
 
-router.get("/", getAdvertisments);
+advertismentRouter.get("/", getAdvertisments);
 
-router.get("/:id", getAdvertisment);
+advertismentRouter.get("/:id", getAdvertisment);
 
-router.post("/", createAdvertisment);
+advertismentRouter.post("/", createAdvertisment);
 
-router.put("/:id", updateAdvertisment);
+advertismentRouter.put("/:id", updateAdvertisment);
 
-router.delete("/:id", deleteAdvertisment);
+advertismentRouter.delete("/:id", deleteAdvertisment);
 
-router.get("/weekly", getWeaklyAdvertisments);
+advertismentRouter.get("/weekly", getWeaklyAdvertisments);
+
+export default advertismentRouter;
