@@ -4,6 +4,8 @@ import {
   activate,
   register,
   resentActivation,
+  forgotPassword,
+  resetPassword,
   signIn,
   deleteUser,
   getUser,
@@ -12,8 +14,9 @@ import {
 } from "../controllers/users.controller.js";
 
 import {
-  activationValidator,
+  emailValidator,
   handleValidation,
+  passwordValidator,
   registerValidator,
 } from "../middleware/validation.middleware.js";
 
@@ -25,9 +28,23 @@ userRouter.put("/activate/:token", activate);
 
 userRouter.post(
   "/resend-activation",
-  activationValidator,
+  emailValidator,
   handleValidation,
   resentActivation
+);
+
+userRouter.post(
+  "/forgot-password",
+  emailValidator,
+  handleValidation,
+  forgotPassword
+);
+
+userRouter.post(
+  "/reset-password",
+  passwordValidator,
+  handleValidation,
+  resetPassword
 );
 
 userRouter.post("/signin", signIn);

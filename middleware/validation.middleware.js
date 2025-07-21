@@ -15,8 +15,17 @@ export const registerValidator = [
     .withMessage("Password must contain at least one number"),
 ];
 
-export const activationValidator = [
+export const emailValidator = [
   body("email").toLowerCase().isEmail().withMessage("Enter a valid email"),
+];
+
+export const passwordValidator = [
+  body("password")
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number"),
 ];
 
 export const handleValidation = (req, res, next) => {

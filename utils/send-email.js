@@ -11,16 +11,27 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = async (email, token) => {
+const sendEmail = async (data, subject, type) => {
+  let html;
+  if (type === "activate") {
+    html = `
+        <h3>Please Click on Link to activate your account</h3>
+        <p>The token will expire after <b>10 minutes</b></p>
+        <p>${SERVER_URL}/api/v1/users/activate/${data.token}</p>
+    `;
+  } else if (type === "reset") {
+    html = `
+        <h3>Please Click on Link to reset the password</h3>
+        <p>The token will expire after <b>10 minutes</b></p>
+        <p>${SERVER_URL}/api/v1/users/reset-password/${data.token}</p>
+    `;
+  }
+
   const emailData = {
     from: EMAIL,
-    to: email,
-    subject: "Account activation link",
-    html: `
-        <h3>Please Click on Link to Activate:</h3>
-        <p>The token will expire after <b>10 minutes</b></p>
-        <p>${SERVER_URL}/api/v1/users/activate/${token}</p>
-    `,
+    to: data.email,
+    subject,
+    html,
   };
 
   transporter.verify((err, success) => {

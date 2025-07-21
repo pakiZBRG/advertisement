@@ -40,7 +40,7 @@ export const register = async (req, res, next) => {
 
     await session.commitTransaction();
 
-    await sendEmail(email, token);
+    await sendEmail({ email, token }, "Account activation link", "activate");
 
     res.status(201).json({
       message: "Email for user activation has been sent",
@@ -108,7 +108,11 @@ export const resentActivation = async (req, res, next) => {
     await User.updateOne({ _id: findUser._id }, { jwtToken });
     await session.commitTransaction();
 
-    await sendEmail(email, findUser.token);
+    await sendEmail(
+      { email, token: findUser.token },
+      "Resend activation link",
+      "activation"
+    );
 
     res.status(200).json({
       message: "Email for user activation has been resent",
@@ -119,6 +123,37 @@ export const resentActivation = async (req, res, next) => {
     session.endSession();
   }
 };
+
+export const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const findUser = await User.findOne({ email });
+    if (!findUser) {
+      return res.status(404).json({ message: "User is not found." });
+    }
+
+    const token = uuidv4();
+    const jwtToken = jwt.sign({ token }, JWT_ACTIVATE, { expiresIn: 600 });
+
+    await User.updateOne({ email }, { token, jwtToken });
+    await session.commitTransaction();
+
+    await sendEmail({ email, token }, "Reset password", "reset");
+
+    res.status(200).json({
+      message: "Reset password link has been sent to your email",
+    });
+  } catch (error) {
+    next(error);
+  } finally {
+    session.endSession();
+  }
+};
+
+export const resetPassword = async (req, res, next) => {};
 
 export const signIn = async (req, res, next) => {};
 
