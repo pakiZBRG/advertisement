@@ -18,8 +18,8 @@ const sendEmail = async (email, token) => {
     subject: "Account activation link",
     html: `
         <h3>Please Click on Link to Activate:</h3>
+        <p>The token will expire after <b>10 minutes</b></p>
         <p>${SERVER_URL}/api/v1/users/activate/${token}</p>
-        <hr/>
     `,
   };
 
@@ -31,8 +31,9 @@ const sendEmail = async (email, token) => {
   transporter.sendMail(emailData, (err, info) => {
     if (err) return console.log(`Veryfing mail ${chalk.red("error")}: ${err}`);
 
-    console.log(`Email ${chalk.green("sent")} to ${info.response}`);
-    console.log({ info });
+    console.log(
+      `Email ${chalk.green(" successfully")} sent to ${info.accepted[0]}`
+    );
   });
 };
 

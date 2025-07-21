@@ -9,7 +9,6 @@ import morgan from "morgan";
 
 import { PORT } from "./config/env.js";
 import userRouter from "./routes/user.routes.js";
-import authRouter from "./routes/auth.routes.js";
 import advertismentRouter from "./routes/advertisment.routes.js";
 import connectMongoDB from "./database/mongodb.js";
 import errorMiddleware from "./middleware/error.middleware.js";
@@ -33,7 +32,6 @@ app.use(cors());
 app.use(rateLimitMiddleware);
 
 // 2. Route middleware
-app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/advertisments", advertismentRouter);
 
