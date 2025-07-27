@@ -206,10 +206,10 @@ export const login = async (req, res, next) => {
     if (!validPassword)
       return res.status(409).json({ error: "Wrong Credentials" });
 
-    const accessToken = jwt.sign({ _id: findUser._id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
       expiresIn: 600,
     });
-    const refreshToken = jwt.sign({ _id: findUser._id }, JWT_SECRET, {
+    const refreshToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
       expiresIn: "10d",
     });
 
@@ -239,10 +239,77 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const getUser = async (req, res, next) => {};
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({ data: users });
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const updateUser = async (req, res, next) => {};
+export const getUser = async (req, res, next) => {
+  const { id } = req.params;
 
-export const deleteUser = async (req, res, next) => {};
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid user id" });
+    }
+
+    const findUser = await User.findById(id);
+    if (!findUser) {
+      return res.status(404).json({ message: "User is not found." });
+    }
+
+    return res.status(200).json({ data: findUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUser = async (req, res, next) => {
+  const { username, email } = req.body;
+  const { id } = req.params;
+
+  try {
+    const findUser = await User.findById(id);
+    if (!findUser)
+      return res.status(404).json({ message: "User is not found" });
+
+    if (id !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to update other users." });
+    }
+
+    await User.findByIdAndUpdate(id, { username, email });
+
+    return res.status(200).json({ message: "User has been updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const findUser = await User.findById(id);
+    if (!findUser)
+      return res.status(404).json({ message: "User is not found" });
+
+    if (id !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to delete other users." });
+    }
+
+    await User.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: "User has been deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getUserAds = async (req, res, next) => {};

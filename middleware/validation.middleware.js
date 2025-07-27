@@ -32,6 +32,11 @@ export const passwordValidator = [
     .withMessage("Password must contain at least one uppercase letter"),
 ];
 
+export const passwordPresenceValidator = body(
+  "password",
+  "Password is required"
+).notEmpty();
+
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

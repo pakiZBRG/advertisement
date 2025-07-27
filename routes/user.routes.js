@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import authorize from "../middleware/auth.middleware.js";
 import {
   activate,
   register,
@@ -8,6 +9,7 @@ import {
   resetPassword,
   login,
   deleteUser,
+  getUsers,
   getUser,
   getUserAds,
   updateUser,
@@ -16,6 +18,7 @@ import {
 import {
   emailValidator,
   handleValidation,
+  passwordPresenceValidator,
   passwordValidator,
   registerValidator,
 } from "../middleware/validation.middleware.js";
@@ -50,17 +53,19 @@ userRouter.post(
 userRouter.post(
   "/login",
   emailValidator,
-  passwordValidator,
+  passwordPresenceValidator,
   handleValidation,
   login
 );
 
-userRouter.get("/:id", getUser);
+userRouter.get("/", getUsers);
 
-userRouter.put("/:id", updateUser);
+userRouter.get("/:id", authorize, getUser);
 
-userRouter.delete("/:id", deleteUser);
+userRouter.put("/:id", authorize, updateUser);
 
-userRouter.get("/user-ads", getUserAds);
+userRouter.delete("/:id", authorize, deleteUser);
+
+userRouter.get("/user-ads", authorize, getUserAds);
 
 export default userRouter;
