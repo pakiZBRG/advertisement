@@ -1,29 +1,13 @@
 import mongoose from "mongoose";
 
 const charLimit = {
-  small: 300,
-  medium: 400,
-  big: 500,
+  small: 200,
+  medium: 300,
+  big: 400,
 };
 
 const advertismentSchema = new mongoose.Schema(
   {
-    description: {
-      type: String,
-      required: [true, "Advertisment description is required"],
-      validate: {
-        validator: function (desc) {
-          const price = this.price || "small"; // fallback if not set
-          const length = desc.length;
-
-          return length <= charLimit[price];
-        },
-        message: function () {
-          const price = this.price || "small";
-          return `Description exceeds maximum length of ${charLimit[price]} characters for a "${price}" advert.`;
-        },
-      },
-    },
     phoneNumber: {
       type: String,
       required: [true, "Phone number is required"],
@@ -33,9 +17,33 @@ const advertismentSchema = new mongoose.Schema(
       enum: ["small", "medium", "big"],
       default: "small",
     },
+    description: {
+      type: String,
+      required: [true, "Advertisment description is required"],
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
+
+advertismentSchema.pre("validate", function (next) {
+  const price = this.price || "small";
+  const desc = this.description || "";
+  const limit = charLimit[price];
+
+  if (desc.length > limit) {
+    this.invalidate(
+      "description",
+      `Description exceeds maximum length of ${limit} characters for a "${price}" advert.`,
+      desc
+    );
+  }
+
+  next();
+});
 
 const Advertisment = mongoose.model("Advertisment", advertismentSchema);
 

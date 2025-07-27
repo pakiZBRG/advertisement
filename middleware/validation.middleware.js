@@ -37,6 +37,12 @@ export const passwordPresenceValidator = body(
   "Password is required"
 ).notEmpty();
 
+export const advertismentValidator = [
+  body("description").trim().escape(),
+  body("phoneNumber").trim().escape(),
+  body("price").trim().escape(),
+];
+
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
