@@ -6,16 +6,13 @@ import {
   createAdvertisment,
   deleteAdvertisment,
   getAdvertisment,
-  getAdvertisments,
   getWeaklyAdvertisments,
   updateAdvertisment,
 } from "../controllers/advertisments.controller.js";
 
 const advertismentRouter = Router();
 
-advertismentRouter.get("/", getAdvertisments);
-
-advertismentRouter.get("/:id", getAdvertisment);
+advertismentRouter.get("/:id", authorize, getAdvertisment);
 
 advertismentRouter.post(
   "/",
@@ -24,9 +21,9 @@ advertismentRouter.post(
   createAdvertisment
 );
 
-advertismentRouter.put("/:id", updateAdvertisment);
+advertismentRouter.put("/:id", authorize, updateAdvertisment);
 
-advertismentRouter.delete("/:id", deleteAdvertisment);
+advertismentRouter.delete("/:id", authorize, deleteAdvertisment);
 
 advertismentRouter.get("/weekly", getWeaklyAdvertisments);
 

@@ -271,12 +271,15 @@ export const updateUser = async (req, res, next) => {
   const { username, email } = req.body;
   const { id } = req.params;
 
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const findUser = await User.findById(id);
     if (!findUser)
       return res.status(404).json({ message: "User is not found" });
 
-    if (id !== req.user.id) {
+    if (findUser._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "You are not allowed to update other users." });
@@ -284,21 +287,28 @@ export const updateUser = async (req, res, next) => {
 
     await User.findByIdAndUpdate(id, { username, email });
 
+    await session.commitTransaction();
+
     return res.status(200).json({ message: "User has been updated" });
   } catch (error) {
     next(error);
+  } finally {
+    session.endSession();
   }
 };
 
 export const deleteUser = async (req, res, next) => {
   const { id } = req.params;
 
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const findUser = await User.findById(id);
     if (!findUser)
       return res.status(404).json({ message: "User is not found" });
 
-    if (id !== req.user.id) {
+    if (findUser._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "You are not allowed to delete other users." });
@@ -306,9 +316,13 @@ export const deleteUser = async (req, res, next) => {
 
     await User.findByIdAndDelete(id);
 
+    await session.commitTransaction();
+
     return res.status(200).json({ message: "User has been deleted" });
   } catch (error) {
     next(error);
+  } finally {
+    session.endSession();
   }
 };
 
