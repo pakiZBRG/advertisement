@@ -1,3 +1,5 @@
+import chalk from "chalk";
+
 const errorMiddleware = (err, req, res, next) => {
   try {
     let error = { ...err };
@@ -6,6 +8,7 @@ const errorMiddleware = (err, req, res, next) => {
     // Mongoose Bad ObjectId
     if (err.name === "CastError") {
       error = new Error("Resource not found");
+      console.log(`${chalk.red(err.name)}: ${err.message}`);
       error.statusCode = 404;
     }
 

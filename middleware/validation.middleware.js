@@ -37,7 +37,7 @@ export const passwordPresenceValidator = body(
   "Password is required"
 ).notEmpty();
 
-export const advertismentValidator = [
+export const advertisementValidator = [
   body("description").trim().escape(),
   body("phoneNumber").trim().escape(),
   body("price").trim().escape(),

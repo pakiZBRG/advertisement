@@ -6,7 +6,7 @@ const charLimit = {
   big: 400,
 };
 
-const advertismentSchema = new mongoose.Schema(
+const advertisementSchema = new mongoose.Schema(
   {
     phoneNumber: {
       type: String,
@@ -19,17 +19,18 @@ const advertismentSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "Advertisment description is required"],
+      required: [true, "Advertisement description is required"],
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      index: true,
     },
   },
   { timestamps: true }
 );
 
-advertismentSchema.pre("validate", function (next) {
+advertisementSchema.pre("validate", function (next) {
   const price = this.price || "small";
   const desc = this.description || "";
   const limit = charLimit[price];
@@ -45,6 +46,6 @@ advertismentSchema.pre("validate", function (next) {
   next();
 });
 
-const Advertisment = mongoose.model("Advertisment", advertismentSchema);
+const Advertisement = mongoose.model("Advertisement", advertisementSchema);
 
-export default Advertisment;
+export default Advertisement;
