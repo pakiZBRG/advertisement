@@ -1,17 +1,14 @@
-import Header from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 
-const App = () => {
+export default function App() {
   return (
-    <main className="flex flex-col h-screen">
-      <Header />
-
-      <Home />
-
-      <Footer />
-    </main>
+    <Routes>
+      <Route path="/" Component={Home} />
+      <Route path="/login" Component={Login} />
+      <Route path="/forgot-password" Component={ForgotPassword} />
+    </Routes>
   );
-};
-
-export default App;
+}
