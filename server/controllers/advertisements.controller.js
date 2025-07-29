@@ -7,7 +7,7 @@ export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisement = await Advertisement.findById(id);
     if (!advertisement)
-      return res.status(404).json({ message: "Advertisement is not found." });
+      return res.status(404).json({ error: "Advertisement is not found." });
 
     return res.status(200).json({ data: advertisement });
   } catch (error) {
@@ -52,11 +52,11 @@ export const updateAdvertisement = async (req, res, next) => {
   try {
     const advertisement = await Advertisement.findById(id);
     if (!advertisement)
-      return res.status(404).json({ message: "Advertisement is not found" });
+      return res.status(404).json({ error: "Advertisement is not found" });
 
     if (advertisement.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
-        message: "You are not allowed to update other's advertisements.",
+        error: "You are not allowed to update other's advertisements.",
       });
     }
 
@@ -84,11 +84,11 @@ export const deleteAdvertisement = async (req, res, next) => {
   try {
     const advertisement = await Advertisement.findById(id);
     if (!advertisement)
-      return res.status(404).json({ message: "Advertisement is not found" });
+      return res.status(404).json({ error: "Advertisement is not found" });
 
     if (advertisement.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
-        message: "You are not allowed to delete other's advertisements.",
+        error: "You are not allowed to delete other's advertisements.",
       });
     }
 
@@ -112,7 +112,7 @@ export const getDatedAdvertisements = async (req, res, next) => {
 
   try {
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      return res.status(400).json({ message: "Invalid date format" });
+      return res.status(400).json({ error: "Invalid date format" });
     }
 
     const ads = await Advertisement.find({

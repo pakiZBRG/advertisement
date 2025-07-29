@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import chalk from "chalk";
 
-import { EMAIL, PASSWORD, SERVER_URL } from "../config/env.js";
+import { EMAIL, PASSWORD, CLIENT_URL } from "../config/env.js";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -17,13 +17,13 @@ const sendEmail = async (data, subject, type) => {
     html = `
         <h3>Please Click on Link to activate your account</h3>
         <p>The token will expire after <b>10 minutes</b></p>
-        <p>${SERVER_URL}/api/v1/users/activate/${data.token}</p>
+        <p>${CLIENT_URL}/activate/${data.token}</p>
     `;
   } else if (type === "reset") {
     html = `
         <h3>Please Click on Link to reset the password</h3>
         <p>The token will expire after <b>10 minutes</b></p>
-        <p>${SERVER_URL}/api/v1/users/reset-password/${data.token}</p>
+        <p>${CLIENT_URL}/api/v1/users/reset-password/${data.token}</p>
     `;
   }
 
@@ -35,12 +35,12 @@ const sendEmail = async (data, subject, type) => {
   };
 
   transporter.verify((err, success) => {
-    if (err) return console.log(`Veryfing mail ${chalk.red("error")}: ${err}`);
+    if (err) return console.log(`${chalk.red("Veryfing mail")}: ${err}`);
     console.log(`Server is ${chalk.green("ready")} to send email`);
   });
 
   transporter.sendMail(emailData, (err, info) => {
-    if (err) return console.log(`Veryfing mail ${chalk.red("error")}: ${err}`);
+    if (err) return console.log(`${chalk.red("Sending mail")}: ${err}`);
 
     console.log(
       `Email ${chalk.green(" successfully")} sent to ${info.accepted[0]}`

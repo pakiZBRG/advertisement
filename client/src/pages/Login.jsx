@@ -31,8 +31,14 @@ const Login = () => {
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
-          Login into your account
+          Welcome back
         </h2>
+        <p>
+          Don't have an account yet?{" "}
+          <Link className="text-amber-400 underline" to="/register">
+            Sign up
+          </Link>
+        </p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col w-80">
           <label htmlFor="email" className="text-sm">
             Email
@@ -63,11 +69,22 @@ const Login = () => {
             </Link>
           </div>
           <button
-            className="mt-10 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-lg text-gray-950"
+            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
             type="submit"
           >
             Login
           </button>
+          <div className="flex flex-row items-center">
+            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
+            <p className="p-2 my-2">or</p>
+            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
+          </div>
+          <Link
+            className="text-center bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
+            to="/register"
+          >
+            Login with Google
+          </Link>
         </form>
       </section>
 

@@ -3,7 +3,7 @@ dotenv.config();
 
 export const {
   PORT,
-  SERVER_URL,
+  CLIENT_URL,
   MONGO_URI,
   ARCJET_KEY,
   EMAIL,

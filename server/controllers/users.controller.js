@@ -8,19 +8,23 @@ import { JWT_SECRET } from "../config/env.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const register = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, confirmPassword } = req.body;
 
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
     const findUserByName = await User.findOne({ username });
     if (findUserByName) {
-      return res.status(409).json({ message: "Username is taken" });
+      return res.status(409).json({ error: "Username is taken" });
     }
 
     const findUserByEmail = await User.findOne({ email });
     if (findUserByEmail) {
-      return res.status(409).json({ message: "Email is taken" });
+      return res.status(409).json({ error: "Email is taken" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -63,7 +67,7 @@ export const activate = async (req, res, next) => {
     if (!findUser) {
       return res
         .status(404)
-        .json({ message: "User doesn't exist or is verified" });
+        .json({ error: "User doesn't exist or is verified" });
     }
 
     const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
@@ -98,7 +102,7 @@ export const resentActivation = async (req, res, next) => {
     if (!findUser) {
       return res
         .status(404)
-        .json({ message: "User is not found or is verified." });
+        .json({ error: "User is not found or is verified." });
     }
 
     const jwtToken = jwt.sign({ token: findUser.token }, JWT_SECRET, {
@@ -132,7 +136,7 @@ export const forgotPassword = async (req, res, next) => {
   try {
     const findUser = await User.findOne({ email });
     if (!findUser) {
-      return res.status(404).json({ message: "User is not found." });
+      return res.status(404).json({ error: "User is not found." });
     }
 
     const token = uuidv4();
@@ -162,7 +166,7 @@ export const resetPassword = async (req, res, next) => {
   try {
     const findUser = await User.findOne({ token, verified: true });
     if (!findUser) {
-      return res.status(404).json({ message: "User is not found" });
+      return res.status(404).json({ error: "User is not found" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -199,7 +203,7 @@ export const login = async (req, res, next) => {
   try {
     const findUser = await User.findOne({ email });
     if (!findUser) {
-      return res.status(404).json({ message: "Wrong credentials" });
+      return res.status(404).json({ error: "Wrong credentials" });
     }
 
     const validPassword = await bcrypt.compare(password, findUser.password);
@@ -258,7 +262,7 @@ export const getUser = async (req, res, next) => {
 
     const findUser = await User.findById(id);
     if (!findUser) {
-      return res.status(404).json({ message: "User is not found." });
+      return res.status(404).json({ error: "User is not found." });
     }
 
     return res.status(200).json({ data: findUser });
@@ -276,13 +280,12 @@ export const updateUser = async (req, res, next) => {
 
   try {
     const findUser = await User.findById(id);
-    if (!findUser)
-      return res.status(404).json({ message: "User is not found" });
+    if (!findUser) return res.status(404).json({ error: "User is not found" });
 
     if (findUser._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
-        .json({ message: "You are not allowed to update other users." });
+        .json({ error: "You are not allowed to update other users." });
     }
 
     await User.findByIdAndUpdate(id, { username, email });
@@ -305,13 +308,12 @@ export const deleteUser = async (req, res, next) => {
 
   try {
     const findUser = await User.findById(id);
-    if (!findUser)
-      return res.status(404).json({ message: "User is not found" });
+    if (!findUser) return res.status(404).json({ error: "User is not found" });
 
     if (findUser._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
-        .json({ message: "You are not allowed to delete other users." });
+        .json({ error: "You are not allowed to delete other users." });
     }
 
     await User.findByIdAndDelete(id);
