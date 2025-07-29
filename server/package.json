@@ -1,6 +1,7 @@
 {
   "name": "advertisement-server",
   "type": "module",
+  "version": "0.0.0",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
