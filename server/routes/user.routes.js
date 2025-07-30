@@ -13,6 +13,7 @@ import {
   getUser,
   getUserAds,
   updateUser,
+  isUserAuth,
 } from "../controllers/users.controller.js";
 
 import {
@@ -57,6 +58,8 @@ userRouter.post(
   handleValidation,
   login
 );
+
+userRouter.get("/me", authorize, isUserAuth);
 
 userRouter.get("/", getUsers);
 

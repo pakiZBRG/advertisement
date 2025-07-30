@@ -235,14 +235,25 @@ export const login = async (req, res, next) => {
         sameSite: "Strict", // 🚫 Prevent CSRF (depending on use case)
         maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
       })
-      .json({
-        message: "Successful login",
-        token: accessToken,
-      });
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict", // Or "Lax"/"None" based on setup
+        maxAge: 15 * 60 * 1000, // 15 mins
+      })
+      .json({ message: "Welcome!" });
   } catch (error) {
     next(error);
   } finally {
     session.endSession();
+  }
+};
+
+export const isUserAuth = async (req, res, next) => {
+  try {
+    return res.status(200).json({ user: req.user });
+  } catch (error) {
+    next(error);
   }
 };
 

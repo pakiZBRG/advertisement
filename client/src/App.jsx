@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import Register from "./pages/Register.jsx";
 import Activate from "./pages/Activate.jsx";
+import CreateAdvertisement from "./pages/CreateAdvertisement.jsx";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/register" Component={Register} />
       <Route path="/activate" Component={Activate} />
       <Route path="/forgot-password" Component={ForgotPassword} />
+      <Route path="/create" Component={CreateAdvertisement} />
     </Routes>
   );
 }

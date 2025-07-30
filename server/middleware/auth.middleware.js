@@ -1,28 +1,17 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
-import User from "../models/User.model.js";
 
-const authorize = async (req, res, next) => {
-  let token;
+const authorize = (req, res, next) => {
+  const token = req.cookies.accessToken; // looking for accessToken in the httpOnly Cookies
+
+  if (!token) return res.status(401).json({ error: "Not authenticated" });
+
   try {
-    if (req.headers.authorization?.startsWith("Bearer")) {
-      token = req.headers.authorization.split(" ")[1];
-    }
-
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-    const decode = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decode.userId);
-
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
-
-    req.user = user;
-
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
     next();
-  } catch (error) {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized", error: error.message });
+  } catch (err) {
+    return res.status(401).json({ error: err.message });
   }
 };
 

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -18,10 +19,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/users/login", formData);
-      console.log(data);
+      toast.success(data.message);
+      navigate("/create");
     } catch (error) {
       toast.error(error.response.data.error);
-      console.log(error);
     }
   };
 

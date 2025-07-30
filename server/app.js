@@ -4,10 +4,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import chalk from "chalk";
 import morgan from "morgan";
 
-import { PORT } from "./config/env.js";
+import { CLIENT_URL, PORT } from "./config/env.js";
 import userRouter from "./routes/user.routes.js";
 import advertisementRouter from "./routes/advertisement.routes.js";
 import connectMongoDB from "./database/mongodb.js";
@@ -28,7 +29,13 @@ app.use(morgan("common", { stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(rateLimitMiddleware);
 
 // 2. Route middleware
