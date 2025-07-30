@@ -17,13 +17,13 @@ const sendEmail = async (data, subject, type) => {
     html = `
         <h3>Please Click on Link to activate your account</h3>
         <p>The token will expire after <b>10 minutes</b></p>
-        <p>${CLIENT_URL}/activate/${data.token}</p>
+        <p>${CLIENT_URL}/activate?token=${data.token}</p>
     `;
   } else if (type === "reset") {
     html = `
         <h3>Please Click on Link to reset the password</h3>
         <p>The token will expire after <b>10 minutes</b></p>
-        <p>${CLIENT_URL}/api/v1/users/reset-password/${data.token}</p>
+        <p>${CLIENT_URL}/reset-password?token=${data.token}</p>
     `;
   }
 

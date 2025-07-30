@@ -63,11 +63,14 @@ export const activate = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
+    const findUserByToken = await User.findOne({ token });
+    if (!findUserByToken) {
+      return res.status(404).json({ error: "User doesn't exist" });
+    }
+
     const findUser = await User.findOne({ token, verified: false });
     if (!findUser) {
-      return res
-        .status(404)
-        .json({ error: "User doesn't exist or is verified" });
+      return res.status(404).json({ error: "User is verified" });
     }
 
     const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);

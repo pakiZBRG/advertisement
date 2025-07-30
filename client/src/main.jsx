@@ -10,7 +10,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <App />
-      <Toaster duration={3000} />
+      <Toaster duration={4000} />
     </BrowserRouter>
   </StrictMode>
 );
