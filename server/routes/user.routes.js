@@ -8,6 +8,7 @@ import {
   forgotPassword,
   resetPassword,
   login,
+  logout,
   deleteUser,
   getUsers,
   getUser,
@@ -58,6 +59,8 @@ userRouter.post(
   handleValidation,
   login
 );
+
+userRouter.post("/logout", logout);
 
 userRouter.get("/me", authorize, isUserAuth);
 

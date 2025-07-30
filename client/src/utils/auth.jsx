@@ -12,7 +12,6 @@ export const useAuth = () => {
         });
         setUser(data.user);
       } catch (err) {
-        console.log(err);
         setUser(null);
       }
     };

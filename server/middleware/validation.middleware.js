@@ -6,7 +6,7 @@ export const registerValidator = [
     .escape()
     .isLength({ min: 4 })
     .withMessage("Username must be at least 4 characters"),
-  body("email").toLowerCase().isEmail().withMessage("Enter a valid email"),
+  body("email").isEmail().withMessage("Enter a valid email"),
   body("password")
     .trim()
     .isLength({ min: 6 })
@@ -18,7 +18,7 @@ export const registerValidator = [
 ];
 
 export const emailValidator = [
-  body("email").toLowerCase().isEmail().withMessage("Enter a valid email"),
+  body("email").isEmail().withMessage("Enter a valid email"),
 ];
 
 export const passwordValidator = [
@@ -45,6 +45,7 @@ export const advertisementValidator = [
 
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
     const firstError = errors.array().map((error) => error.msg)[0];
     return res.status(400).json({ error: firstError });

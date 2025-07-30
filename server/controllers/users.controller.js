@@ -161,19 +161,29 @@ export const forgotPassword = async (req, res, next) => {
 };
 
 export const resetPassword = async (req, res, next) => {
+  const { password, confirmPassword } = req.body;
   const { token } = req.params;
 
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
+    const findUserByToken = await User.findOne({ token });
+    if (!findUserByToken) {
+      return res.status(404).json({ error: "Token has expired" });
+    }
+
     const findUser = await User.findOne({ token, verified: true });
     if (!findUser) {
       return res.status(404).json({ error: "User is not found" });
     }
 
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
+    }
+
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(findUser.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
     await User.updateOne(
@@ -214,7 +224,7 @@ export const login = async (req, res, next) => {
       return res.status(409).json({ error: "Wrong Credentials" });
 
     const accessToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
-      expiresIn: 600,
+      expiresIn: 900,
     });
     const refreshToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
       expiresIn: "10d",
@@ -246,6 +256,28 @@ export const login = async (req, res, next) => {
     next(error);
   } finally {
     session.endSession();
+  }
+};
+
+export const logout = async (req, res, next) => {
+  const { refreshToken } = req.cookies;
+  console.log({ refreshToken, user: req.body.user });
+  try {
+    // res.clearCookie("accessToken", {
+    //   httpOnly: true,
+    //   sameSite: "Strict",
+    //   secure: process.env.NODE_ENV === "production",
+    // });
+
+    // res.clearCookie("refreshToken", {
+    //   httpOnly: true,
+    //   sameSite: "Strict",
+    //   secure: process.env.NODE_ENV === "production",
+    // });
+
+    return res.status(200).json({ message: "Logged out! See you soon." });
+  } catch (error) {
+    next(error);
   }
 };
 

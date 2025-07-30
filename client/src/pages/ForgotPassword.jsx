@@ -8,16 +8,17 @@ import Footer from "../components/Footer";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
-  const handleChange = (e) => setEmail(e.target.email);
+  const handleChange = (e) => setEmail(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/v1/users/forgot-password", email);
-      console.log(data);
+      const { data } = await axios.post("/api/v1/users/forgot-password", {
+        email,
+      });
+      toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.error);
-      console.log(error);
     }
   };
 
@@ -27,8 +28,9 @@ const ForgotPassword = () => {
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
-          Frogot Password? We will send an email to reset it.
+          Frogot Password?
         </h2>
+        <p>We will send an email so you can reset it.</p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col w-72">
           <label htmlFor="email" className="text-sm">
             Email
