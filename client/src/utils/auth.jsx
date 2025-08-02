@@ -12,6 +12,7 @@ export const useAuth = () => {
         });
         setUser(data.user);
       } catch (err) {
+        console.log("Auth error", err);
         setUser(null);
       }
     };

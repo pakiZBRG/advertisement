@@ -6,6 +6,7 @@ import Activate from "./pages/Activate.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import CreateAdvertisement from "./pages/CreateAdvertisement.jsx";
+import { PrivateRoute } from "./helpers/PrivateRoute.jsx";
 
 export default function App() {
   return (
@@ -16,7 +17,14 @@ export default function App() {
       <Route path="/activate" Component={Activate} />
       <Route path="/forgot-password" Component={ForgotPassword} />
       <Route path="/reset-password" Component={ResetPassword} />
-      <Route path="/create" Component={CreateAdvertisement} />
+      <Route
+        path="/create"
+        element={
+          <PrivateRoute>
+            <CreateAdvertisement />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }

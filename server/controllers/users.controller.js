@@ -260,20 +260,22 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res, next) => {
-  const { refreshToken } = req.cookies;
-  console.log({ refreshToken, user: req.body.user });
-  try {
-    // res.clearCookie("accessToken", {
-    //   httpOnly: true,
-    //   sameSite: "Strict",
-    //   secure: process.env.NODE_ENV === "production",
-    // });
+  const { userId } = req.body.user;
 
-    // res.clearCookie("refreshToken", {
-    //   httpOnly: true,
-    //   sameSite: "Strict",
-    //   secure: process.env.NODE_ENV === "production",
-    // });
+  try {
+    await User.findByIdAndUpdate(userId, { $set: { refreshToken: "" } });
+
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+    });
 
     return res.status(200).json({ message: "Logged out! See you soon." });
   } catch (error) {

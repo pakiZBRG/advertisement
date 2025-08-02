@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -11,9 +13,12 @@ const Home = () => {
           Create Advertisement for Your Goods
         </h2>
         <p className="opacity-80">Sell anything at any time and price</p>
-        <button className="px-5 py-1 mt-8 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
+        <Link
+          to="/create"
+          className="px-5 py-1 mt-8 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900"
+        >
           Create your ad <span className="ml-1">➜</span>
-        </button>
+        </Link>
       </section>
 
       <Footer />
