@@ -1,13 +1,8 @@
 import { Navigate } from "react-router-dom";
-import { toast } from "sonner";
-import { useAuth } from "../utils/auth";
+import useUserStore from "../context/UserContext";
 
 export const PrivateRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { user } = useUserStore();
 
-  toast.warning("You are not logged in.");
-
-  console.log({ user });
-
-  return user !== null ? children : <Navigate to="/" />;
+  return user?.length === 0 ? <Navigate to="/" /> : children;
 };

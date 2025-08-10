@@ -5,10 +5,12 @@ import { toast } from "sonner";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import useUserStore from "../context/UserContext.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const { setUser } = useUserStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,6 +21,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/users/login", formData);
+      console.log({ data });
+      setUser(data.user);
       toast.success(data.message);
       navigate("/create");
     } catch (error) {

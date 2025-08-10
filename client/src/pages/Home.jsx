@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import useUserStore from "../context/UserContext";
 
 const Home = () => {
+  const { user } = useUserStore();
+
   return (
     <main className="flex flex-col h-screen">
       <Header />
@@ -14,7 +17,7 @@ const Home = () => {
         </h2>
         <p className="opacity-80">Sell anything at any time and price</p>
         <Link
-          to="/create"
+          to={user?.length === 0 ? "/login" : "/create"}
           className="px-5 py-1 mt-8 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900"
         >
           Create your ad <span className="ml-1">➜</span>

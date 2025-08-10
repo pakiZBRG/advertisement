@@ -214,20 +214,20 @@ export const login = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const findUser = await User.findOne({ email });
-    if (!findUser) {
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(404).json({ error: "Wrong credentials" });
     }
 
-    const validPassword = await bcrypt.compare(password, findUser.password);
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res.status(409).json({ error: "Wrong Credentials" });
 
-    const accessToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: 900,
     });
-    const refreshToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
-      expiresIn: "10d",
+    const refreshToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: "14d",
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -251,7 +251,7 @@ export const login = async (req, res, next) => {
         sameSite: "Strict", // Or "Lax"/"None" based on setup
         maxAge: 15 * 60 * 1000, // 15 mins
       })
-      .json({ message: "Welcome!" });
+      .json({ message: "Welcome!", user: user._id });
   } catch (error) {
     next(error);
   } finally {

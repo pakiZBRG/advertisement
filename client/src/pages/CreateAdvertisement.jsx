@@ -1,12 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useAuth } from "../utils/auth.jsx";
 
 const CreateAdvertisement = () => {
-  const { user } = useAuth();
-
-  console.log({ user });
-
   return (
     <main className="flex flex-col h-screen">
       <Header />
