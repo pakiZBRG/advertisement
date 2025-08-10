@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Header from "../components/Header.jsx";
@@ -10,7 +10,7 @@ import useUserStore from "../context/UserContext.jsx";
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const { setUser } = useUserStore();
+  const { user, setUser } = useUserStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +21,6 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/users/login", formData);
-      console.log({ data });
       setUser(data.user);
       toast.success(data.message);
       navigate("/create");
@@ -32,6 +31,7 @@ const Login = () => {
 
   return (
     <main className="flex flex-col h-screen">
+      {user?.length ? <Navigate to="/" /> : null}
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">

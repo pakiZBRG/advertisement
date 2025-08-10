@@ -1,12 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import useUserStore from "../context/UserContext.jsx";
 
 const Register = () => {
+  const { user } = useUserStore();
   const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
@@ -26,6 +28,7 @@ const Register = () => {
 
   return (
     <main className="flex flex-col h-screen">
+      {user?.length ? <Navigate to="/" /> : null}
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">

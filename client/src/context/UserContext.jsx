@@ -13,8 +13,7 @@ const useUserStore = create((set) => ({
       if (data.message) throw new Error("Not authenticated");
 
       set({ user: data.user.userId });
-    } catch (err) {
-      console.log({ err });
+    } catch {
       set({ user: "" });
     }
   },
