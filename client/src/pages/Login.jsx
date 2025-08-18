@@ -21,17 +21,18 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/users/login", formData);
-      setUser(data.user);
+      setUser({ userId: data.user, accessToken: data.accessToken });
       toast.success(data.message);
       navigate("/create");
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data.error);
     }
   };
 
   return (
     <main className="flex flex-col h-screen">
-      {user?.length ? <Navigate to="/" /> : null}
+      {user.userId?.length ? <Navigate to="/" /> : null}
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">

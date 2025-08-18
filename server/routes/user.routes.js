@@ -15,6 +15,7 @@ import {
   getUserAds,
   updateUser,
   isUserAuth,
+  refreshToken,
 } from "../controllers/users.controller.js";
 
 import {
@@ -63,6 +64,8 @@ userRouter.post(
 userRouter.post("/logout", logout);
 
 userRouter.get("/me", authorize, isUserAuth);
+
+userRouter.post("/refresh", authorize, refreshToken);
 
 userRouter.get("/", getUsers);
 

@@ -17,7 +17,7 @@ const Home = () => {
         </h2>
         <p className="opacity-80">Sell anything at any time and price</p>
         <Link
-          to={user?.length === 0 ? "/login" : "/create"}
+          to={user.userId?.length ? "/create" : "/login"}
           className="px-5 py-1 mt-8 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900"
         >
           Create your ad <span className="ml-1">➜</span>

@@ -11,7 +11,7 @@ import CreateAdvertisement from "./pages/CreateAdvertisement.jsx";
 import useUserStore from "./context/UserContext.jsx";
 
 export default function App() {
-  const checkAuth = useUserStore((store) => store.checkAuth);
+  const { checkAuth } = useUserStore();
 
   useEffect(() => {
     checkAuth();

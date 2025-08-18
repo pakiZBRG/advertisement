@@ -5,9 +5,7 @@ import { toast } from "sonner";
 import useUserStore from "../context/UserContext";
 
 const Header = () => {
-  const { user, setUser } = useUserStore();
-
-  console.log({ user });
+  const { user, clearUser } = useUserStore();
 
   const logout = async () => {
     try {
@@ -18,12 +16,14 @@ const Header = () => {
           withCredentials: true,
         }
       );
-      setUser("");
+      clearUser();
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.error);
     }
   };
+
+  console.log(user);
 
   return (
     <header className="bg-gray-950 text-amber-50">
@@ -36,10 +36,12 @@ const Header = () => {
           <li>Contact</li>
         </div>
         <li className="px-3 py-1 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
-          {user?.length === 0 ? (
-            <Link to="/login">Login</Link>
+          {user.userId ? (
+            <button className="cursor-pointer" onClick={logout}>
+              Logout
+            </button>
           ) : (
-            <Link onClick={logout}>Logout</Link>
+            <Link to="/login">Login</Link>
           )}
         </li>
       </ul>

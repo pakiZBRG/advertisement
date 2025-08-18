@@ -9,7 +9,7 @@ const CreateAdvertisement = () => {
 
   return (
     <main className="flex flex-col h-screen">
-      {user?.length ? null : <Navigate to="/" />}
+      {user?.userId !== null ? null : <Navigate to="/" />}
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">

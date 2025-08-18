@@ -245,13 +245,7 @@ export const login = async (req, res, next) => {
         sameSite: "Strict", // 🚫 Prevent CSRF (depending on use case)
         maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
       })
-      .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict", // Or "Lax"/"None" based on setup
-        maxAge: 15 * 60 * 1000, // 15 mins
-      })
-      .json({ message: "Welcome!", user: user._id });
+      .json({ message: "Welcome!", user: user._id, accessToken });
   } catch (error) {
     next(error);
   } finally {
@@ -264,12 +258,6 @@ export const logout = async (req, res, next) => {
 
   try {
     await User.findByIdAndUpdate(userId, { $set: { refreshToken: "" } });
-
-    res.clearCookie("accessToken", {
-      httpOnly: true,
-      sameSite: "Strict",
-      secure: process.env.NODE_ENV === "production",
-    });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
@@ -286,6 +274,22 @@ export const logout = async (req, res, next) => {
 export const isUserAuth = async (req, res, next) => {
   try {
     return res.status(200).json({ user: req.user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refreshToken = async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.status(401).json({ message: "No refresh token" });
+  try {
+    const verify = jwt.verify(token, JWT_SECRET);
+
+    const accessToken = jwt.sign({ userId: verify.userId }, JWT_SECRET, {
+      expiresIn: 900,
+    });
+
+    return res.status(200).json({ accessToken, userId: verify.userId });
   } catch (error) {
     next(error);
   }
