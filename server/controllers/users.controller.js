@@ -6,6 +6,7 @@ import User from "../models/User.model.js";
 import sendEmail from "../utils/send-email.js";
 import { JWT_SECRET } from "../config/env.js";
 import { v4 as uuidv4 } from "uuid";
+import Advertisement from "../models/Advertisement.model.js";
 
 export const register = async (req, res, next) => {
   const { username, email, password, confirmPassword } = req.body;
@@ -391,4 +392,17 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getUserAds = async (req, res, next) => {};
+export const getUserAds = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id).select(
+      "-password -refreshToken -token -jwtToken"
+    );
+    const advertisements = await Advertisement.find({ user: id });
+
+    return res.status(200).json({ advertisements, user });
+  } catch (err) {
+    next(err);
+  }
+};

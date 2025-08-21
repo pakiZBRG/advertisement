@@ -17,7 +17,7 @@ import rateLimitMiddleware from "./middleware/rate-limit.middleware.js";
 
 const app = express();
 
-// Recreate __dirname
+// Recreate  becase moduleJS
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const stream = fs.createWriteStream(path.join(__dirname, "access.log"), {

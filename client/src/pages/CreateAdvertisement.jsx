@@ -10,9 +10,9 @@ import useUserStore from "../context/UserContext";
 import api from "../api/axios";
 
 const CHAR_LIMITS = {
-  small: 300,
-  medium: 400,
-  big: 500,
+  small: 200,
+  medium: 300,
+  big: 400,
 };
 
 // Doesn't re-render heavy PhoneInput component on description keystroke
@@ -52,10 +52,14 @@ const CreateAdvertisement = () => {
         description,
         phoneNumber: phone,
         price: selectedOption,
+        user: user.userId,
       };
 
       const { data } = await api.post("/advertisements", formData);
       toast.success(data.message);
+      setDescription("");
+      setPhone("");
+      setSelectedOption("small");
     } catch (error) {
       toast.error(error.response.data.error);
     }

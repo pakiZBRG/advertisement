@@ -75,6 +75,6 @@ userRouter.put("/:id", authorize, updateUser);
 
 userRouter.delete("/:id", authorize, deleteUser);
 
-userRouter.get("/user-ads", authorize, getUserAds);
+userRouter.get("/user-ads/:id", authorize, getUserAds);
 
 export default userRouter;

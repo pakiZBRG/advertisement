@@ -16,7 +16,7 @@ export const getAdvertisement = async (req, res, next) => {
 };
 
 export const createAdvertisement = async (req, res, next) => {
-  const { description, phoneNumber, price } = req.body;
+  const { description, phoneNumber, price, user } = req.body;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -25,7 +25,7 @@ export const createAdvertisement = async (req, res, next) => {
       description,
       phoneNumber,
       price,
-      user: req.user.id,
+      user,
     });
 
     await advertisement.save({ session });

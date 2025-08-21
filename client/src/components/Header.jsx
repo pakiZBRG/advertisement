@@ -33,6 +33,11 @@ const Header = () => {
           <Link to="/contact" className="mr-4">
             Contact
           </Link>
+          {user.userId ? (
+            <Link to="/profile" className="mr-4">
+              Profile
+            </Link>
+          ) : null}
         </div>
         <li className="px-3 py-1 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
           {user.userId ? (
