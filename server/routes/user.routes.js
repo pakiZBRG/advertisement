@@ -15,6 +15,7 @@ import {
   getUserAds,
   updateUser,
   refreshToken,
+  sendMessage,
 } from "../controllers/users.controller.js";
 
 import {
@@ -63,6 +64,8 @@ userRouter.post(
 userRouter.post("/logout", logout);
 
 userRouter.post("/refresh", refreshToken);
+
+userRouter.post("/send-message", sendMessage);
 
 userRouter.get("/", getUsers);
 

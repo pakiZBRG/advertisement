@@ -25,11 +25,16 @@ const sendEmail = async (data, subject, type) => {
         <p>The token will expire after <b>10 minutes</b></p>
         <p>${CLIENT_URL}/reset-password?token=${data.token}</p>
     `;
+  } else if (type === "sendMessage") {
+    html = `
+        <h3>You got a message from <b>${data.name}</b></h3>
+        <p>${data.message}</p>
+    `;
   }
 
   const emailData = {
-    from: EMAIL,
-    to: data.email,
+    from: type === "sendMessage" ? data.email : EMAIL,
+    to: type === "sendMessage" ? EMAIL : data.email,
     subject,
     html,
   };

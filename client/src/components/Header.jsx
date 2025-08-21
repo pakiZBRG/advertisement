@@ -30,8 +30,9 @@ const Header = () => {
           <Link to="/" className="mr-4">
             Home
           </Link>
-          <li className="mr-4">About</li>
-          <li>Contact</li>
+          <Link to="/contact" className="mr-4">
+            Contact
+          </Link>
         </div>
         <li className="px-3 py-1 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
           {user.userId ? (

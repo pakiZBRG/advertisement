@@ -288,6 +288,24 @@ export const refreshToken = async (req, res, next) => {
   }
 };
 
+export const sendMessage = async (req, res, next) => {
+  const { name, email, message } = req.body;
+
+  console.log(req.body);
+
+  try {
+    await sendEmail(
+      { email, name, message },
+      `New message from ${name}`,
+      "sendMessage"
+    );
+
+    return res.status(200).json({ message: "Message has been sent" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getUsers = async (req, res, next) => {
   try {
     const users = await User.find();

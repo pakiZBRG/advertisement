@@ -9,6 +9,7 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import CreateAdvertisement from "./pages/CreateAdvertisement.jsx";
 import useUserStore from "./context/UserContext.jsx";
+import Contact from "./pages/Contact.jsx";
 
 export default function App() {
   const { checkAuth } = useUserStore();
@@ -20,6 +21,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" Component={Home} />
+      <Route path="/contact" Component={Contact} />
       <Route path="/login" Component={Login} />
       <Route path="/register" Component={Register} />
       <Route path="/activate" Component={Activate} />
