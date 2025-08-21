@@ -43,6 +43,10 @@ advertisementSchema.pre("validate", function (next) {
     );
   }
 
+  if (this.phoneNumber.length < 12) {
+    this.invalidate("phoneNumber", "Phone number is not valid");
+  }
+
   next();
 });
 

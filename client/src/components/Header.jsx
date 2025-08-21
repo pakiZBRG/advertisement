@@ -23,8 +23,6 @@ const Header = () => {
     }
   };
 
-  console.log(user);
-
   return (
     <header className="bg-gray-950 text-amber-50">
       <ul className="flex justify-between items-center mx-2 p-4">

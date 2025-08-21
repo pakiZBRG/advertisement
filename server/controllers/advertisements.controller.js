@@ -32,10 +32,7 @@ export const createAdvertisement = async (req, res, next) => {
 
     await session.commitTransaction();
 
-    res.status(201).json({
-      message: "Advertisement created",
-      data: { advertisement },
-    });
+    res.status(201).json({ message: "Advertisement created" });
   } catch (error) {
     next(error);
   } finally {

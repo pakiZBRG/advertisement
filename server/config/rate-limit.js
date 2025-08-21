@@ -15,7 +15,7 @@ const rateLimit = arcjet({
       mode: "LIVE",
       refillRate: 5,
       interval: 10,
-      capacity: 10,
+      capacity: 20,
     }),
   ],
 });

@@ -2,8 +2,10 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
 
 const authorize = (req, res, next) => {
-  const token = req.cookies.refreshToken; // looking for refreshToken in the httpOnly Cookies
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: "Not authenticated" });
 
+  const token = authHeader.split(" ")[1]; // "Bearer <token>"
   if (!token) return res.status(401).json({ error: "Not authenticated" });
 
   try {

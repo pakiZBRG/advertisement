@@ -25,14 +25,13 @@ const Login = () => {
       toast.success(data.message);
       navigate("/create");
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.error);
     }
   };
 
   return (
     <main className="flex flex-col h-screen">
-      {user.userId?.length ? <Navigate to="/" /> : null}
+      {user.userId ? <Navigate to="/" /> : null}
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">

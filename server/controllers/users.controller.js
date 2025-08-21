@@ -271,17 +271,10 @@ export const logout = async (req, res, next) => {
   }
 };
 
-export const isUserAuth = async (req, res, next) => {
-  try {
-    return res.status(200).json({ user: req.user });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const refreshToken = async (req, res, next) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ message: "No refresh token" });
+
   try {
     const verify = jwt.verify(token, JWT_SECRET);
 
