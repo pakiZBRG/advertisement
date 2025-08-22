@@ -33,9 +33,9 @@ const ForgotPassword = () => {
     <main className="flex flex-col h-screen">
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
+      <section className="background flex-1 flex justify-center flex-col items-center">
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
-          Frogot Password?
+          Forgot Password?
         </h2>
         <p className="opacity-80">
           We will send you an email so you can reset it.
@@ -45,17 +45,14 @@ const ForgotPassword = () => {
             Email
           </label>
           <input
-            className="text-gray-900 bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="input"
             type="email"
             name="email"
             id="email"
             value={email}
             onChange={handleChange}
           />
-          <button
-            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold flex justify-center items-center text-gray-950"
-            type="submit"
-          >
+          <button className="mt-8 button" type="submit">
             Send Email
             <FaPaperPlane className="ml-2" />
           </button>

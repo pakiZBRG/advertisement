@@ -1,6 +1,18 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Quicksand:wght@300..700&display=swap");
 @import "tailwindcss";
 
 body {
-  font-family: "Quicksand", sans-serif;
+  font-family: monospace, sans-serif;
+}
+
+.background {
+  background-color: #090909;
+  color: #e8e8e8;
+}
+
+.button {
+  @apply px-3 py-1 text-xl rounded-lg border-1 border-[#e8e8e8] cursor-pointer font-semibold hover:text-[#090909] hover:border-[#090909] hover:bg-[#e8e8e8] transition duration-200 font-mono flex justify-center items-center;
+}
+
+.input {
+  @apply text-[#090909] bg-[#e8e8e8] rounded-lg p-1 px-2 outline-0;
 }

@@ -25,9 +25,9 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gray-950 text-amber-50">
+    <header className="background">
       <ul className="flex justify-between items-center mx-2 p-4">
-        <div className="flex flex-row">
+        <div className="flex flex-row font-mono uppercase">
           <Link to="/" className="mr-4">
             Home
           </Link>
@@ -40,7 +40,7 @@ const Header = () => {
             </Link>
           ) : null}
         </div>
-        <li className="px-3 py-1 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
+        <li className="button">
           {user.userId ? (
             <button
               className="cursor-pointer text-[1rem] flex justify-center items-center"

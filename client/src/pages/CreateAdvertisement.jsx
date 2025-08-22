@@ -15,6 +15,8 @@ const CHAR_LIMITS = {
   big: 400,
 };
 
+const RADIO_BUTTONS = ["small", "medium", "big"];
+
 // Doesn't re-render heavy PhoneInput component on description keystroke
 const PhoneField = React.memo(({ phone, setPhone }) => (
   <PhoneInput
@@ -48,6 +50,11 @@ const CreateAdvertisement = () => {
     e.preventDefault();
 
     try {
+      if (description === "" || phone.length < 5) {
+        toast.warning("Please enter all fields");
+        return 0;
+      }
+
       const formData = {
         description,
         phoneNumber: phone,
@@ -56,6 +63,7 @@ const CreateAdvertisement = () => {
       };
 
       const { data } = await api.post("/advertisements", formData);
+
       toast.success(data.message);
       setDescription("");
       setPhone("");
@@ -70,7 +78,7 @@ const CreateAdvertisement = () => {
       {user.userId ? null : <Navigate to="/" />}
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
+      <section className="background flex-1 flex justify-center flex-col items-center">
         <h2 className="text-3xl text-center mx-3 mb-3 font-bold">
           Create Advertisement for Your Goods
         </h2>
@@ -79,41 +87,19 @@ const CreateAdvertisement = () => {
             Price option
           </label>
           <div className="flex justify-between">
-            <label>
-              <input
-                type="radio"
-                name="price"
-                value="small"
-                className="mr-1"
-                checked={selectedOption === "small"}
-                onChange={handleOption}
-              />
-              Small
-            </label>
-
-            <label>
-              <input
-                type="radio"
-                name="price"
-                value="medium"
-                className="mr-1"
-                checked={selectedOption === "medium"}
-                onChange={handleOption}
-              />
-              Medium
-            </label>
-
-            <label>
-              <input
-                type="radio"
-                name="price"
-                value="big"
-                className="mr-1"
-                checked={selectedOption === "big"}
-                onChange={handleOption}
-              />
-              Big
-            </label>
+            {RADIO_BUTTONS.map((btn) => (
+              <label className="flex justify-center items-center">
+                <input
+                  type="radio"
+                  name="price"
+                  value={btn}
+                  className="mr-1"
+                  checked={selectedOption === btn}
+                  onChange={handleOption}
+                />
+                {btn.charAt(0).toUpperCase() + btn.slice(1)}
+              </label>
+            ))}
           </div>
           <label htmlFor="description" className="text-sm mt-3">
             Description
@@ -121,24 +107,21 @@ const CreateAdvertisement = () => {
           <textarea
             rows={4}
             maxLength={limit}
-            className="text-gray-900 resize-none bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="resize-none input"
             name="description"
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          <div className="text-right text-sm">
+          <div className="text-right text-sm mt-1">
             {description.length}/{limit}
           </div>
 
-          <label htmlFor="phone" className="text-sm mt-3">
-            Phone
+          <label htmlFor="phone" className="text-sm mt-1">
+            Phone number
           </label>
           <PhoneField phone={phone} setPhone={setPhone} />
-          <button
-            className="mt-6 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
-            type="submit"
-          >
+          <button className="mt-8 button" type="submit">
             Create
           </button>
         </form>

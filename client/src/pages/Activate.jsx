@@ -4,6 +4,7 @@ import axios from "axios";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Divider from "../components/Divider";
 
 const Activate = () => {
   const [searchParams] = useSearchParams();
@@ -23,26 +24,19 @@ const Activate = () => {
     <main className="flex flex-col h-screen">
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
+      <section className="background flex-1 flex justify-center flex-col items-center">
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Activate your account
         </h2>
+        <p className="opacity-80">
+          The token for account activation lasts for 10 minutes.
+        </p>
         <div className="w-80">
-          <button
-            className="text-center bg-yellow-400 w-full mt-7 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
-            onClick={activateUser}
-          >
+          <button className="mt-8 button w-full" onClick={activateUser}>
             Activate
           </button>
-          <div className="flex flex-row items-center">
-            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
-            <p className="p-2 my-2">or</p>
-            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
-          </div>
-          <Link
-            className="text-center bg-yellow-400 py-1 block rounded-lg cursor-pointer font-bold text-md text-gray-950"
-            to="/login"
-          >
+          <Divider />
+          <Link className="button" to="/login">
             Login
           </Link>
         </div>

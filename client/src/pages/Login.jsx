@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import Divider from "../components/Divider.jsx";
 import useUserStore from "../context/UserContext.jsx";
 
 const Login = () => {
@@ -21,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       if (formData.password === "" || formData.email === "") {
-        toast.warning("Please enter both fields");
+        toast.warning("Please enter all fields");
         return 0;
       }
 
@@ -40,13 +41,13 @@ const Login = () => {
       {user.userId ? <Navigate to="/" /> : null}
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
+      <section className="background flex-1 flex justify-center flex-col items-center">
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Welcome back
         </h2>
         <p className="opacity-80">
           Don't have an account yet?{" "}
-          <Link className="text-amber-400 underline" to="/register">
+          <Link className="underline" to="/register">
             Sign up
           </Link>
         </p>
@@ -55,7 +56,7 @@ const Login = () => {
             Email
           </label>
           <input
-            className="text-gray-900 bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="input"
             type="email"
             name="email"
             id="email"
@@ -65,7 +66,7 @@ const Login = () => {
             Password
           </label>
           <input
-            className="bg-amber-50 text-gray-900 rounded-lg p-1 px-2 outline-0"
+            className="input"
             type="password"
             name="password"
             id="password"
@@ -73,27 +74,17 @@ const Login = () => {
           />
           <div className="text-right">
             <Link
-              className="text-xs w-max underline mt-2 inline-block"
+              className="text-xs underline mt-2 inline-block"
               to="/forgot-password"
             >
               Forgot Password?
             </Link>
           </div>
-          <button
-            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
-            type="submit"
-          >
+          <button className="mt-8 button" type="submit">
             Login
           </button>
-          <div className="flex flex-row items-center">
-            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
-            <p className="p-2 my-2">or</p>
-            <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
-          </div>
-          <Link
-            className="text-center bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
-            to="/register"
-          >
+          <Divider />
+          <Link className="text-center button" to="/register">
             Login with Google
           </Link>
         </form>

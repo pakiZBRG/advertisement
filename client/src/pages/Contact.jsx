@@ -22,6 +22,15 @@ const Contact = () => {
     e.preventDefault();
 
     try {
+      if (
+        formData.email === "" ||
+        formData.name === "" ||
+        formData.message === ""
+      ) {
+        toast.warning("Please enter all fields");
+        return 0;
+      }
+
       const { data } = await api.post("/users/send-message", formData);
       setFormData({ email: "", name: "", message: "" });
       toast.success(data.message);
@@ -34,8 +43,8 @@ const Contact = () => {
     <main className="flex flex-col h-screen">
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
-        <h2 className="text-2xl font-bold">Found any inconvenience?</h2>
+      <section className="background flex-1 flex justify-center flex-col items-center">
+        <h2 className="text-3xl font-bold">Found any inconvenience?</h2>
         <p className="mt-1 mb-2 opacity-80">
           Contact us at any time with any thing
         </p>
@@ -45,8 +54,7 @@ const Contact = () => {
             Email
           </label>
           <input
-            required
-            className="text-gray-900 bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="input"
             type="email"
             name="email"
             id="email"
@@ -57,8 +65,7 @@ const Contact = () => {
             Name
           </label>
           <input
-            required
-            className="text-gray-900 bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="input"
             type="text"
             name="name"
             id="name"
@@ -70,18 +77,14 @@ const Contact = () => {
           </label>
           <textarea
             rows={5}
-            required
-            className="text-gray-900 resize-none bg-amber-50 rounded-lg p-1 px-2 outline-0"
+            className="resize-none input"
             name="message"
             id="message"
             value={formData.message}
             onChange={handleChange}
           ></textarea>
 
-          <button
-            className="mt-6 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md flex justify-center items-center text-gray-950"
-            type="submit"
-          >
+          <button className="mt-7 button" type="submit">
             Send message
             <FaPaperPlane className="ml-2" />
           </button>

@@ -5,8 +5,8 @@ const Footer = () => {
   const { user } = useUserStore();
 
   return (
-    <footer className="bg-gray-950 text-amber-50">
-      <ul className="flex justify-center mx-2 p-4">
+    <footer className="background">
+      <ul className="flex justify-center mx-2 p-4 uppercase font-mono">
         <Link to="/" className="mr-4">
           Home
         </Link>

@@ -33,8 +33,8 @@ const Profile = () => {
       {user.userId ? null : <Navigate to="/" />}
       <Header />
 
-      <section className="bg-gray-900 text-amber-50 py-12 flex-1 flex justify-center flex-col items-center">
-        <h2 className="text-2xl font-bold">Hello, {profile.username}</h2>
+      <section className="background py-12 flex-1 flex justify-center flex-col items-center">
+        <h2 className="text-3xl font-bold">Hello, {profile.username}</h2>
         <p className="mb-10 text-center">
           You currently have <b>{ads.length}</b> advertisements at your disposal
         </p>
@@ -43,9 +43,9 @@ const Profile = () => {
             {ads?.map((ad) => (
               <li
                 key={ad._id}
-                className="border-1 min-h-24 rounded-sm w-68 border-white p-2 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 hover:translate-x-1 transition duration-200"
+                className="min-h-24 rounded-xl w-68 bg-[#1d1c21] p-4 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 transition duration-200"
               >
-                <p className="break-words">{ad.description}</p>
+                <p className="break-words text-gray-300">{ad.description}</p>
                 <div>
                   <small className="mt-2 flex justify-between w-full">
                     <span className="flex items-center">
