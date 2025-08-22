@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { FaRightFromBracket, FaRightToBracket } from "react-icons/fa6";
 
 import useUserStore from "../context/UserContext";
 
@@ -41,11 +42,19 @@ const Header = () => {
         </div>
         <li className="px-3 py-1 text-xl rounded-lg cursor-pointer font-semibold bg-yellow-400 text-gray-900">
           {user.userId ? (
-            <button className="cursor-pointer" onClick={logout}>
-              Logout
+            <button
+              className="cursor-pointer text-[1rem] flex justify-center items-center"
+              onClick={logout}
+            >
+              Logout <FaRightFromBracket className="ml-2" />
             </button>
           ) : (
-            <Link to="/login">Login</Link>
+            <Link
+              to="/login"
+              className="text-[1rem] flex justify-around items-center"
+            >
+              Login <FaRightToBracket className="ml-2" />
+            </Link>
           )}
         </li>
       </ul>

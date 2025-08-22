@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { FaPaperPlane } from "react-icons/fa6";
 
 import api from "../api/axios";
 import Header from "../components/Header";
@@ -34,9 +35,10 @@ const Contact = () => {
       <Header />
 
       <section className="bg-gray-900 text-amber-50 flex-1 flex justify-center flex-col items-center">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold">Found any inconvenience?</h2>
+        <p className="mt-1 mb-2 opacity-80">
           Contact us at any time with any thing
-        </h2>
+        </p>
 
         <form onSubmit={sendMessage} className="mt-6 flex flex-col w-80">
           <label htmlFor="email" className="text-sm">
@@ -77,10 +79,11 @@ const Contact = () => {
           ></textarea>
 
           <button
-            className="mt-6 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
+            className="mt-6 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md flex justify-center items-center text-gray-950"
             type="submit"
           >
             Send message
+            <FaPaperPlane className="ml-2" />
           </button>
         </form>
       </section>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
+import { FaUserPlus } from "react-icons/fa6";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -35,7 +36,7 @@ const Register = () => {
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Create a new account
         </h2>
-        <p>
+        <p className="opacity-80">
           Already have an account?{" "}
           <Link className="text-amber-400 underline" to="/login">
             Log in
@@ -83,10 +84,11 @@ const Register = () => {
             onChange={handleChange}
           />
           <button
-            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-md text-gray-950"
+            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold flex justify-center items-center text-gray-950"
             type="submit"
           >
             Create Account
+            <FaUserPlus className="ml-2" />
           </button>
         </form>
       </section>

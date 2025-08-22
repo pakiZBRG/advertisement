@@ -20,7 +20,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (formData.password === "" || formData.email === "") {
+        toast.warning("Please enter both fields");
+        return 0;
+      }
+
       const { data } = await axios.post("/api/v1/users/login", formData);
+
       setUser({ userId: data.user, accessToken: data.accessToken });
       toast.success(data.message);
       navigate("/create");
@@ -38,7 +44,7 @@ const Login = () => {
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Welcome back
         </h2>
-        <p>
+        <p className="opacity-80">
           Don't have an account yet?{" "}
           <Link className="text-amber-400 underline" to="/register">
             Sign up

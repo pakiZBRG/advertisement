@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
+import { FaLock } from "react-icons/fa6";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -19,10 +20,20 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (formData.password === "" || formData.confrimPassword === "") {
+        toast.warning("Please enter both fields");
+        return 0;
+      }
+      if (formData.password === formData.confrimPassword) {
+        toast.warning("Passwords do not match");
+        return 0;
+      }
+
       const { data } = await axios.post(
         `/api/v1/users/reset-password/${token}`,
         formData
       );
+      setFormData({});
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.error);
@@ -37,7 +48,7 @@ const ResetPassword = () => {
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Reset Password
         </h2>
-        <p>Set your new password and confirm it.</p>
+        <p className="opacity-80">Set your new password and confirm it.</p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col w-72">
           <label htmlFor="password" className="text-sm">
             Password
@@ -47,6 +58,7 @@ const ResetPassword = () => {
             type="password"
             name="password"
             id="password"
+            value={formData.password}
             onChange={handleChange}
           />
           <label htmlFor="confirmPassword" className="text-sm mt-4">
@@ -57,13 +69,15 @@ const ResetPassword = () => {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
+            value={formData.confirmPassword}
             onChange={handleChange}
           />
           <button
-            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold text-lg text-gray-950"
+            className="mt-8 bg-yellow-400 py-1 rounded-lg cursor-pointer font-bold flex justify-center items-center text-gray-950"
             type="submit"
           >
             Reset
+            <FaLock className="ml-2" />
           </button>
           <div className="flex flex-row items-center">
             <span className="h-[1px] opacity-25 w-xl bg-amber-50"></span>
