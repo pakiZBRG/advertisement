@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { FaPhone, FaMoneyBill1Wave, FaCalendarWeek } from "react-icons/fa6";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import useUserStore from "../context/UserContext";
-import api from "../api/axios";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import useUserStore from "../../context/UserContext";
+import api from "../../api/axios";
 
 const Profile = () => {
   const [ads, setAds] = useState([]);
@@ -43,7 +43,7 @@ const Profile = () => {
             {ads?.map((ad) => (
               <li
                 key={ad._id}
-                className="min-h-24 rounded-xl w-68 bg-[#1d1c21] p-4 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 transition duration-200"
+                className="min-h-24 border-[1px] border-gray-700 rounded-xl w-68 bg-[#1d1c21] p-4 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 transition duration-200"
               >
                 <p className="break-words text-gray-300">{ad.description}</p>
                 <div>

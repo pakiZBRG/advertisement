@@ -4,9 +4,9 @@ import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FaUserPlus } from "react-icons/fa6";
 
-import Header from "../components/Header.jsx";
-import Footer from "../components/Footer.jsx";
-import useUserStore from "../context/UserContext.jsx";
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
+import useUserStore from "../../context/UserContext.jsx";
 
 const Register = () => {
   const { user } = useUserStore();

@@ -2,9 +2,9 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Divider from "../components/Divider";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import Divider from "../../components/Divider";
 import { Link, useSearchParams } from "react-router-dom";
 
 const ResetPassword = () => {

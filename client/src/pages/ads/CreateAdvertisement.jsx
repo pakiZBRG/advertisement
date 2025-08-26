@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import useUserStore from "../context/UserContext";
-import api from "../api/axios";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import useUserStore from "../../context/UserContext";
+import api from "../../api/axios";
 
 const CHAR_LIMITS = {
   small: 200,
