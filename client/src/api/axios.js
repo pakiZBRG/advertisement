@@ -52,7 +52,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await api.post(
-          "/users/refresh",
+          "/auth/refresh",
           {},
           { withCredentials: true }
         );

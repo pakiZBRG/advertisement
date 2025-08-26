@@ -11,7 +11,7 @@ const Header = () => {
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "/api/v1/users/logout",
+        "/api/v1/auth/logout",
         { user },
         {
           withCredentials: true,
@@ -25,7 +25,7 @@ const Header = () => {
   };
 
   return (
-    <header className="background">
+    <header className="background border-b-[1px] border-gray-800">
       <ul className="flex justify-between items-center mx-2 p-4">
         <div className="flex flex-row font-mono uppercase">
           <Link to="/" className="mr-4">

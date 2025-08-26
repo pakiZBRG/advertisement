@@ -31,7 +31,7 @@ const Contact = () => {
         return 0;
       }
 
-      const { data } = await api.post("/users/send-message", formData);
+      const { data } = await api.post("/auth/send-message", formData);
       setFormData({ email: "", name: "", message: "" });
       toast.success(data.message);
     } catch (err) {
@@ -44,7 +44,9 @@ const Contact = () => {
       <Header />
 
       <section className="background flex-1 flex justify-center flex-col items-center">
-        <h2 className="text-3xl font-bold">Found any inconvenience?</h2>
+        <h2 className="text-3xl font-bold text-center">
+          Found any inconvenience?
+        </h2>
         <p className="mt-1 mb-2 opacity-80">
           Contact us at any time with any thing
         </p>

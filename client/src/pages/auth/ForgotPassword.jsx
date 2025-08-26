@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { FaPaperPlane } from "react-icons/fa6";
+import { FaPaperPlane, FaArrowLeftLong } from "react-icons/fa6";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
   const handleChange = (e) => setEmail(e.target.value);
@@ -33,11 +35,18 @@ const ForgotPassword = () => {
     <main className="flex flex-col h-screen">
       <Header />
 
-      <section className="background flex-1 flex justify-center flex-col items-center">
+      <section className="background flex-1 flex justify-center flex-col items-center relative">
+        <div
+          onClick={() => navigate(-1)}
+          className="absolute cursor-pointer top-3 left-5 flex items-center"
+        >
+          <FaArrowLeftLong className="" />
+          <small className="italic ml-2">Go Back</small>
+        </div>
         <h2 className="text-4xl text-center mx-3 mb-3 font-bold">
           Forgot Password?
         </h2>
-        <p className="opacity-80">
+        <p className="opacity-80 text-center">
           We will send you an email so you can reset it.
         </p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col w-72">

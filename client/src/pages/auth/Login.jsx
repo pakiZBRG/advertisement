@@ -27,7 +27,7 @@ const Login = () => {
         return 0;
       }
 
-      const { data } = await axios.post("/api/v1/users/login", formData);
+      const { data } = await axios.post("/api/v1/auth/login", formData);
 
       if (data.user) {
         setUser({ userId: data.user, accessToken: data.accessToken });
@@ -41,7 +41,7 @@ const Login = () => {
 
   const googleLogin = async (credentialResponse) => {
     try {
-      const { data } = await axios.post("/api/v1/users/google", {
+      const { data } = await axios.post("/api/v1/auth/google", {
         token: credentialResponse.credential,
       });
       setUser({ userId: data.user, accessToken: data.accessToken });

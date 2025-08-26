@@ -2,67 +2,14 @@ import { Router } from "express";
 
 import authorize from "../middleware/auth.middleware.js";
 import {
-  activate,
-  register,
-  resentActivation,
-  forgotPassword,
-  resetPassword,
-  login,
-  logout,
   deleteUser,
   getUsers,
   getUser,
   getUserAds,
   updateUser,
-  refreshToken,
-  sendMessage,
-  googleLogin,
 } from "../controllers/users.controller.js";
 
-import {
-  emailValidator,
-  handleValidation,
-  passwordPresenceValidator,
-  passwordValidator,
-  registerValidator,
-} from "../middleware/validation.middleware.js";
-
 const userRouter = Router();
-
-userRouter.post("/", registerValidator, handleValidation, register);
-
-userRouter.put("/activate/:token", activate);
-
-userRouter.post(
-  "/resend-activation",
-  emailValidator,
-  handleValidation,
-  resentActivation
-);
-
-userRouter.post(
-  "/forgot-password",
-  emailValidator,
-  handleValidation,
-  forgotPassword
-);
-
-userRouter.post(
-  "/reset-password/:token",
-  passwordValidator,
-  handleValidation,
-  resetPassword
-);
-
-userRouter.post("/login", emailValidator, handleValidation, login);
-
-userRouter.post("/google", googleLogin);
-
-userRouter.post("/logout", logout);
-
-userRouter.post("/refresh", refreshToken);
-
-userRouter.post("/send-message", sendMessage);
 
 userRouter.get("/", getUsers);
 

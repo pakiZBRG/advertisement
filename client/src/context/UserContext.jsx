@@ -18,7 +18,7 @@ const useUserStore = create((set, get) => ({
   checkAuth: async () => {
     try {
       const { data } = await axios.post(
-        "/api/v1/users/refresh",
+        "/api/v1/auth/refresh",
         {},
         { withCredentials: true }
       );

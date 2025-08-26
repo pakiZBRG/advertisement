@@ -10,7 +10,12 @@ import useUserStore from "../../context/UserContext.jsx";
 
 const Register = () => {
   const { user } = useUserStore();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +25,22 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/v1/users", formData);
+      if (
+        formData.email === "" ||
+        formData.username === "" ||
+        formData.password === "" ||
+        formData.confirmPassword === ""
+      ) {
+        toast.warning("Please enter all fields");
+        return 0;
+      }
+
+      if (formData.password === formData.confirmPassword) {
+        toast.warning("Passwords need to match");
+        return 0;
+      }
+
+      const { data } = await axios.post("/api/v1/auth/register", formData);
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.error);

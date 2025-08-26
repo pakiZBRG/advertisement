@@ -13,7 +13,7 @@ const Activate = () => {
   const activateUser = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/api/v1/users/activate/${token}`);
+      const { data } = await axios.put(`/api/v1/auth/activate/${token}`);
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.error);

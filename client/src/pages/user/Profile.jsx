@@ -34,7 +34,9 @@ const Profile = () => {
       <Header />
 
       <section className="background py-12 flex-1 flex justify-center flex-col items-center">
-        <h2 className="text-3xl font-bold">Hello, {profile.username}</h2>
+        <h2 className="text-3xl font-bold text-center mb-3">
+          Hello, {profile.username}
+        </h2>
         <p className="mb-10 text-center">
           You currently have <b>{ads.length}</b> advertisements at your disposal
         </p>

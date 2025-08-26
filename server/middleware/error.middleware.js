@@ -25,6 +25,7 @@ const errorMiddleware = (err, req, res, next) => {
       error.statusCode = 400;
     }
 
+    // Token expired error
     if (err.name === "TokenExpiredError") {
       error = new Error("Activation link expired. Please request a new one.");
       error.status = 410;

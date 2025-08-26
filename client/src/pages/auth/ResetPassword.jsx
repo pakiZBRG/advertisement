@@ -30,7 +30,7 @@ const ResetPassword = () => {
       }
 
       const { data } = await axios.post(
-        `/api/v1/users/reset-password/${token}`,
+        `/api/v1/auth/reset-password/${token}`,
         formData
       );
       setFormData({});
