@@ -16,6 +16,7 @@ import {
   updateUser,
   refreshToken,
   sendMessage,
+  googleLogin,
 } from "../controllers/users.controller.js";
 
 import {
@@ -53,13 +54,9 @@ userRouter.post(
   resetPassword
 );
 
-userRouter.post(
-  "/login",
-  emailValidator,
-  passwordPresenceValidator,
-  handleValidation,
-  login
-);
+userRouter.post("/login", emailValidator, handleValidation, login);
+
+userRouter.post("/google", googleLogin);
 
 userRouter.post("/logout", logout);
 

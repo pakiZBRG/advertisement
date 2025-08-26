@@ -9,4 +9,5 @@ export const {
   EMAIL,
   PASSWORD,
   JWT_SECRET,
+  GOOGLE_CLIENT_ID,
 } = process.env;

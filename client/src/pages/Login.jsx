@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { GoogleLogin } from "@react-oauth/google";
 
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -21,13 +22,28 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.password === "" || formData.email === "") {
-        toast.warning("Please enter all fields");
+      if (formData.email === "") {
+        toast.warning("Please enter email field");
         return 0;
       }
 
       const { data } = await axios.post("/api/v1/users/login", formData);
 
+      if (data.user) {
+        setUser({ userId: data.user, accessToken: data.accessToken });
+        navigate("/create");
+      }
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.response.data.error);
+    }
+  };
+
+  const googleLogin = async (credentialResponse) => {
+    try {
+      const { data } = await axios.post("/api/v1/users/google", {
+        token: credentialResponse.credential,
+      });
       setUser({ userId: data.user, accessToken: data.accessToken });
       toast.success(data.message);
       navigate("/create");
@@ -84,9 +100,15 @@ const Login = () => {
             Login
           </button>
           <Divider />
-          <Link className="text-center button" to="/register">
-            Login with Google
-          </Link>
+          <GoogleLogin
+            text="signin"
+            shape="rectangular"
+            logo_alignment="center"
+            onSuccess={googleLogin}
+            onError={() =>
+              toast.error("Google login failed. Please try the regular login.")
+            }
+          />
         </form>
       </section>
 

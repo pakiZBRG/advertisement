@@ -87,8 +87,8 @@ const CreateAdvertisement = () => {
             Price option
           </label>
           <div className="flex justify-between">
-            {RADIO_BUTTONS.map((btn) => (
-              <label className="flex justify-center items-center">
+            {RADIO_BUTTONS.map((btn, i) => (
+              <label key={i} className="flex justify-center items-center">
                 <input
                   type="radio"
                   name="price"

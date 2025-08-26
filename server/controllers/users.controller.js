@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 
 import User from "../models/User.model.js";
 import sendEmail from "../utils/send-email.js";
-import { JWT_SECRET } from "../config/env.js";
+import { GOOGLE_CLIENT_ID, JWT_SECRET } from "../config/env.js";
 import { v4 as uuidv4 } from "uuid";
 import Advertisement from "../models/Advertisement.model.js";
+
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const register = async (req, res, next) => {
   const { username, email, password, confirmPassword } = req.body;
@@ -77,11 +80,7 @@ export const activate = async (req, res, next) => {
     const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
     await User.updateOne(
       { token: verify.token },
-      {
-        token: "",
-        jwtToken: "",
-        verified: true,
-      }
+      { $set: { token: "", jwtToken: "", verified: true } }
     );
 
     await session.commitTransaction();
@@ -113,7 +112,7 @@ export const resentActivation = async (req, res, next) => {
       expiresIn: 600,
     });
 
-    await User.updateOne({ _id: findUser._id }, { jwtToken });
+    await User.updateOne({ _id: findUser._id }, { $set: { jwtToken } });
     await session.commitTransaction();
 
     await sendEmail(
@@ -146,7 +145,7 @@ export const forgotPassword = async (req, res, next) => {
     const token = uuidv4();
     const jwtToken = jwt.sign({ token }, JWT_SECRET, { expiresIn: 600 });
 
-    await User.updateOne({ email }, { token, jwtToken });
+    await User.updateOne({ email }, { $set: { token, jwtToken } });
     await session.commitTransaction();
 
     await sendEmail({ email, token }, "Reset password", "reset");
@@ -189,11 +188,7 @@ export const resetPassword = async (req, res, next) => {
     const verify = jwt.verify(findUser.jwtToken, JWT_SECRET);
     await User.updateOne(
       { token: verify.token },
-      {
-        token: "",
-        jwtToken: "",
-        password: hashedPassword,
-      }
+      { $set: { token: "", jwtToken: "", password: hashedPassword } }
     );
 
     await session.commitTransaction();
@@ -220,6 +215,13 @@ export const login = async (req, res, next) => {
       return res.status(404).json({ error: "Wrong credentials" });
     }
 
+    if (user.google && user.password === null) {
+      return res.status(200).json({
+        message:
+          "This account was created with Google Login. Please click on Forgot Password? to set your password or login with Google.",
+      });
+    }
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res.status(409).json({ error: "Wrong Credentials" });
@@ -234,7 +236,10 @@ export const login = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
-    await User.updateOne({ email }, { refreshToken: hashedRefreshToken });
+    await User.updateOne(
+      { email },
+      { $set: { refreshToken: hashedRefreshToken } }
+    );
 
     await session.commitTransaction();
 
@@ -244,9 +249,76 @@ export const login = async (req, res, next) => {
         httpOnly: true, // 🔒 Can't be accessed by JS
         secure: true, // 🔐 Only over HTTPS
         sameSite: "Strict", // 🚫 Prevent CSRF (depending on use case)
-        maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+        maxAge: 14 * 24 * 60 * 60 * 1000, // 10 days
       })
       .json({ message: "Welcome!", user: user._id, accessToken });
+  } catch (error) {
+    next(error);
+  } finally {
+    session.endSession();
+  }
+};
+
+export const googleLogin = async (req, res, next) => {
+  const { token } = req.body;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name } = payload;
+
+    const findUser = await User.findOne({ email });
+    let accessToken, refreshToken;
+
+    if (findUser) {
+      accessToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
+        expiresIn: 900,
+      });
+      refreshToken = jwt.sign({ userId: findUser._id }, JWT_SECRET, {
+        expiresIn: "14d",
+      });
+    } else {
+      const user = new User({
+        username: name,
+        email,
+        google: true,
+        verified: true,
+      });
+      await user.save({ session });
+
+      accessToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
+        expiresIn: 900,
+      });
+      refreshToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
+        expiresIn: "14d",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+    await User.updateOne(
+      { email },
+      { $set: { refreshToken: hashedRefreshToken } }
+    );
+    await session.commitTransaction();
+
+    return res
+      .status(200)
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true, // 🔒 Can't be accessed by JS
+        secure: true, // 🔐 Only over HTTPS
+        sameSite: "Strict", // 🚫 Prevent CSRF (depending on use case)
+        maxAge: 14 * 24 * 60 * 60 * 1000, // 10 days
+      })
+      .json({ message: "Welcome!", user: findUser._id, accessToken });
   } catch (error) {
     next(error);
   } finally {
