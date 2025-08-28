@@ -38,8 +38,8 @@ export const passwordPresenceValidator = body(
 ).notEmpty();
 
 export const advertisementValidator = [
-  body("description").trim().escape(),
-  body("phoneNumber").trim().escape(),
+  body("description").trim(),
+  body("phoneNumber").trim().isMobilePhone(),
   body("price").trim().escape(),
 ];
 

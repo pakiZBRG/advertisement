@@ -93,13 +93,19 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const getUserAds = async (req, res, next) => {
-  const { id } = req.params;
+  const { userId } = req.params;
+  const { last } = req.query;
+  const limit = 10;
+
+  const query = last ? { _id: { $lt: last }, user: userId } : { user: userId };
 
   try {
-    const user = await User.findById(id).select(
+    const user = await User.findById(userId).select(
       "-password -refreshToken -token -jwtToken"
     );
-    const advertisements = await Advertisement.find({ user: id });
+    const advertisements = await Advertisement.find(query)
+      .sort({ _id: -1, createdAt: -1 })
+      .limit(limit);
 
     return res.status(200).json({ advertisements, user });
   } catch (err) {

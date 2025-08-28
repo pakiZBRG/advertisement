@@ -19,6 +19,6 @@ userRouter.put("/:id", authorize, updateUser);
 
 userRouter.delete("/:id", authorize, deleteUser);
 
-userRouter.get("/user-ads/:id", authorize, getUserAds);
+userRouter.get("/user-ads/:userId", authorize, getUserAds);
 
 export default userRouter;
