@@ -43,6 +43,7 @@ export const createAdvertisement = async (req, res, next) => {
 export const updateAdvertisement = async (req, res, next) => {
   const { description, phoneNumber, price } = req.body;
   const { id } = req.params;
+  const { userId } = req.user;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -51,21 +52,27 @@ export const updateAdvertisement = async (req, res, next) => {
     if (!advertisement)
       return res.status(404).json({ error: "Advertisement is not found" });
 
-    if (advertisement.user.toString() !== req.user._id.toString()) {
+    if (advertisement.user.toString() !== userId.toString()) {
       return res.status(403).json({
         error: "You are not allowed to update other's advertisements.",
       });
     }
 
-    await Advertisement.findByIdAndUpdate(id, {
-      description,
-      phoneNumber,
-      price,
-    });
+    const updatedAt = await Advertisement.findByIdAndUpdate(
+      id,
+      {
+        description,
+        phoneNumber,
+        price,
+      },
+      { new: true, runValidators: true }
+    );
 
     await session.commitTransaction();
 
-    return res.status(200).json({ message: "Advertisement has been updated" });
+    return res
+      .status(200)
+      .json({ message: "Advertisement has been updated", ad: updatedAt });
   } catch (error) {
     next(error);
   } finally {
@@ -75,6 +82,7 @@ export const updateAdvertisement = async (req, res, next) => {
 
 export const deleteAdvertisement = async (req, res, next) => {
   const { id } = req.params;
+  const { userId } = req.user;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -83,7 +91,7 @@ export const deleteAdvertisement = async (req, res, next) => {
     if (!advertisement)
       return res.status(404).json({ error: "Advertisement is not found" });
 
-    if (advertisement.user.toString() !== req.user.userId.toString()) {
+    if (advertisement.user.toString() !== userId.toString()) {
       return res.status(403).json({
         error: "You are not allowed to delete other's advertisements.",
       });

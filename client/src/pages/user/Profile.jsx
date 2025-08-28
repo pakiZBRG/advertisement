@@ -9,12 +9,15 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import useUserStore from "../../context/UserContext";
 import api from "../../api/axios";
+import AdForm from "../../components/AdForm";
 
 const Profile = () => {
   const [ads, setAds] = useState([]);
   const [profile, setProfile] = useState({});
   const [hasMore, setHasMore] = useState(true);
   const [last, setLast] = useState("");
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [openedAd, setOpenedAd] = useState({});
   const { user } = useUserStore();
 
   const getUserAds = async () => {
@@ -47,12 +50,21 @@ const Profile = () => {
     }
   };
 
+  const openForm = (ad) => {
+    setOpenedAd(ad);
+    setOpenEditForm(!openEditForm);
+  };
+
   useEffect(() => {
     if (user.userId) getUserAds();
   }, [user.userId]);
 
   return (
-    <main className="flex flex-col h-screen">
+    <main
+      className={`flex flex-col h-screen ${
+        openEditForm ? "overflow-hidden" : null
+      }`}
+    >
       {user.userId ? null : <Navigate to="/" />}
       <Header />
 
@@ -105,7 +117,9 @@ const Profile = () => {
 
                   {/* Overlay (hidden until hover) */}
                   <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-200">
-                    <button className="button">Edit</button>
+                    <button className="button" onClick={() => openForm(ad)}>
+                      Edit
+                    </button>
                     <button className="button" onClick={() => deleteAd(ad._id)}>
                       Delete
                     </button>
@@ -117,6 +131,25 @@ const Profile = () => {
         </div>
       </section>
       <Footer />
+
+      {openEditForm ? (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={() => setOpenEditForm(false)} // clicking backdrop closes it
+        >
+          <div
+            className="bg-[#1d1c21] p-5 border border-gray-700 rounded-lg"
+            onClick={(e) => e.stopPropagation()} // prevent closing whelgn clicking inside
+          >
+            <AdForm
+              type="edit"
+              ad={openedAd}
+              setOpenEditForm={setOpenEditForm}
+              setAds={setAds}
+            />
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 };
