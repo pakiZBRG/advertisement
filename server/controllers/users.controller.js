@@ -95,7 +95,7 @@ export const deleteUser = async (req, res, next) => {
 export const getUserAds = async (req, res, next) => {
   const { userId } = req.params;
   const { last } = req.query;
-  const limit = 10;
+  const limit = 20;
 
   const query = last ? { _id: { $lt: last }, user: userId } : { user: userId };
 

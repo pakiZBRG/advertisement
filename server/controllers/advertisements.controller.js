@@ -83,7 +83,7 @@ export const deleteAdvertisement = async (req, res, next) => {
     if (!advertisement)
       return res.status(404).json({ error: "Advertisement is not found" });
 
-    if (advertisement.user.toString() !== req.user._id.toString()) {
+    if (advertisement.user.toString() !== req.user.userId.toString()) {
       return res.status(403).json({
         error: "You are not allowed to delete other's advertisements.",
       });

@@ -36,6 +36,17 @@ const Profile = () => {
     }
   };
 
+  const deleteAd = async (id) => {
+    try {
+      const { data } = await api.delete(`/advertisements/${id}`);
+
+      setAds((prevAds) => prevAds.filter((ad) => ad._id !== id));
+      toast.success(data.message);
+    } catch (err) {
+      toast.error(err.response.data.error);
+    }
+  };
+
   useEffect(() => {
     if (user.userId) getUserAds();
   }, [user.userId]);
@@ -68,24 +79,36 @@ const Profile = () => {
               {ads?.map((ad) => (
                 <li
                   key={ad._id}
-                  className="min-h-24 border-[1px] border-gray-700 rounded-xl w-68 bg-[#1d1c21] p-4 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 transition duration-200"
+                  className="relative group min-h-24 border-[1px] border-gray-700 rounded-xl w-68 bg-[#1d1c21] p-4 m-2 flex flex-col justify-between cursor-default hover:-translate-y-1 transition duration-400"
                 >
-                  <p className="break-words text-gray-300">{ad.description}</p>
-                  <div>
-                    <small className="mt-2 flex justify-between w-full">
-                      <span className="flex items-center">
-                        <FaPhone className="mr-1" />
-                        {ad.phoneNumber}
-                      </span>
-                      <span className="flex items-center">
-                        <FaMoneyBill1Wave className="mr-1" />
-                        {ad.price}
-                      </span>
-                    </small>
-                    <small className="flex items-center">
-                      <FaCalendarWeek className="mr-1" />
-                      {dayjs(ad.createdAt).format("MMMM D YYYY, HH:mm")}
-                    </small>
+                  <div className="group-hover:blur-md transition duration-200">
+                    <p className="break-words text-gray-300">
+                      {ad.description}
+                    </p>
+                    <div>
+                      <small className="mt-2 flex justify-between w-full">
+                        <span className="flex items-center">
+                          <FaPhone className="mr-1" />
+                          {ad.phoneNumber}
+                        </span>
+                        <span className="flex items-center">
+                          <FaMoneyBill1Wave className="mr-1" />
+                          {ad.price}
+                        </span>
+                      </small>
+                      <small className="flex items-center">
+                        <FaCalendarWeek className="mr-1" />
+                        {dayjs(ad.createdAt).format("MMMM D YYYY, HH:mm")}
+                      </small>
+                    </div>
+                  </div>
+
+                  {/* Overlay (hidden until hover) */}
+                  <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-200">
+                    <button className="button">Edit</button>
+                    <button className="button" onClick={() => deleteAd(ad._id)}>
+                      Delete
+                    </button>
                   </div>
                 </li>
               ))}
