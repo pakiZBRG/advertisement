@@ -1,4 +1,4 @@
-### Webapp by which you can create an advertisement for selling your goods and services
+### Webapp by which you can create advertisements for selling your goods and services
 
 Web logic:
 
@@ -9,3 +9,4 @@ Web logic:
 - Using refresh/access token for login security. Refresh token is hashed and stored in database on the backend. In the frontend, refresh token is stored in `HttpOnly cookie` (secured from JS injection), lasts 14 days and is sent with each `axios` request. Access token is stored in the memory (`zustand` state) and lasts 15 minutes. Axios intercepts requests to inject access token for authorization and calls `/refresh` route if the requests anwsers 401
 - UI is stylized with `tailwind` and `sonner` toast messages
 - Google login flow
+- Infinite scroll pagination
